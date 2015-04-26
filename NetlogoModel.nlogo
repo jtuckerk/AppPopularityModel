@@ -2,27 +2,31 @@ to setup
   clear-all
   setup-patches
   setup-turtles
+  
+  setup-turtles-with-app
+  ;;setup-patches-with-ads
   reset-ticks
 end
 
-turtles-own [energy]
+turtles-own
+ [
+  group
+  app?
+  
+   ]
+
 
 to go
   if ticks >= 500 [ stop ]
   move-turtles
-  eat-grass
-  reproduce
-  check-death
-  regrow-grass
+
   tick
 end
 
 to move-turtles
   ask turtles [
     right random 360
-    forward 3
-    forward 2
-    set energy energy - 2
+    forward 1
   ]
 end
 
@@ -31,47 +35,31 @@ to setup-patches
 end
 
 to setup-turtles
-  create-turtles number
+  create-turtles number-of-turtles
   ask turtles [ setxy random-xcor random-ycor ]
 end
 
-to eat-grass
-  ask turtles [
-    if pcolor = green [
-      set pcolor black
-      set energy energy + energy-from-grass
-    ]
-  ifelse show-energy?
-    [ set label energy ]
-    [ set label "" ]
-  ]
+to setup-turtles-with-app
+  
 end
 
-to reproduce
-  ask turtles [
-    if energy > 50 [
-      set energy energy - birth-energy
-      hatch 1 [ set energy birth-energy ]
-    ]
-  ]
+to setup-patches-with-ads
+  
 end
 
-to check-death
-  ask turtles [
-    if energy <= 0 [ die ]
-  ]
+to attempt-talk
+  
 end
 
-to regrow-grass
-  ask patches [
-    if random 100 < 3 [ set pcolor green ]
-  ]
+to talk
+  
+  
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
-210
+261
 10
-649
+700
 470
 16
 16
@@ -96,10 +84,10 @@ ticks
 30.0
 
 BUTTON
-32
-24
-98
-57
+3
+10
+69
+43
 NIL
 setup
 NIL
@@ -113,10 +101,10 @@ NIL
 1
 
 BUTTON
-41
-75
-104
-108
+70
+10
+133
+43
 NIL
 go\n
 T
@@ -129,44 +117,22 @@ NIL
 NIL
 0
 
-MONITOR
-17
-134
-110
-179
-NIL
-count turtles
-17
-1
-11
-
-MONITOR
-28
-193
-263
-238
-NIL
-count patches with [pcolor = green]
-17
-1
-11
-
 SWITCH
-22
-262
-166
-295
-show-energy?
-show-energy?
+718
+274
+870
+307
+start-with-ads?
+start-with-ads?
 1
 1
 -1000
 
 PLOT
-22
-318
-222
-468
+6
+321
+206
+471
 Totals
 time
 totals
@@ -178,16 +144,101 @@ true
 false
 "" ""
 PENS
-"default" 1.0 0 -16777216 true "" "plot count turtles"
-"pen-1" 1.0 0 -13840069 true "" "plot count patches with [pcolor = green]"
+"default" 1.0 0 -16777216 true "" "plot count turtles with [app? = true]"
 
 SLIDER
-58
-250
-230
-283
-number
-number
+716
+203
+963
+236
+number-turtles-start-with-app
+number-turtles-start-with-app
+0
+100
+1
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+718
+309
+904
+342
+number-of-ads-start
+number-of-ads-start
+0
+100
+0
+1
+1
+NIL
+HORIZONTAL
+
+SWITCH
+715
+169
+910
+202
+start-turtles-with-app
+start-turtles-with-app
+1
+1
+-1000
+
+SLIDER
+716
+95
+888
+128
+number-of-turtles
+number-of-turtles
+0
+300
+50
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+16
+71
+188
+104
+app-utility-rating
+app-utility-rating
+0
+10
+5
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+17
+105
+194
+138
+app-funness-rating
+app-funness-rating
+0
+10
+5
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+15
+140
+249
+173
+app-user-friendliness-rating
+app-user-friendliness-rating
 0
 100
 50
@@ -197,30 +248,45 @@ NIL
 HORIZONTAL
 
 SLIDER
-721
-46
-895
-79
-energy-from-grass
-energy-from-grass
+15
+175
+187
+208
+app-cost
+app-cost
 0
-100
-50
+10
+5
 1
 1
 NIL
 HORIZONTAL
 
 SLIDER
-695
-437
-867
-470
-birth-energy
-birth-energy
+15
+209
+210
+242
+app-sharing-neccesity
+app-sharing-neccesity
 0
-100
-50
+10
+5
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+16
+243
+212
+276
+app-sharing-capability
+app-sharing-capability
+0
+10
+5
 1
 1
 NIL
