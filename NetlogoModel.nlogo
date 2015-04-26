@@ -214,10 +214,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-721
-123
-893
-156
+695
+437
+867
+470
 birth-energy
 birth-energy
 0
