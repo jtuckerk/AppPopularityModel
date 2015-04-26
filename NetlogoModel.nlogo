@@ -20,10 +20,8 @@ end
 to move-turtles
   ask turtles [
     right random 360
-
     forward 3
     forward 2
-
     set energy energy - 2
   ]
 end
@@ -214,10 +212,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-721
-123
-893
-156
+754
+248
+926
+281
 birth-energy
 birth-energy
 0
