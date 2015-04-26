@@ -1,3 +1,71 @@
+to setup
+  clear-all
+  setup-patches
+  setup-turtles
+  reset-ticks
+end
+
+turtles-own [energy]
+
+to go
+  if ticks >= 500 [ stop ]
+  move-turtles
+  eat-grass
+  reproduce
+  check-death
+  regrow-grass
+  tick
+end
+
+to move-turtles
+  ask turtles [
+    right random 360
+    forward 1
+    set energy energy - 1
+  ]
+end
+
+to setup-patches
+  ask patches [ set pcolor green ]
+end
+
+to setup-turtles
+  create-turtles number
+  ask turtles [ setxy random-xcor random-ycor ]
+end
+
+to eat-grass
+  ask turtles [
+    if pcolor = green [
+      set pcolor black
+      set energy energy + energy-from-grass
+    ]
+  ifelse show-energy?
+    [ set label energy ]
+    [ set label "" ]
+  ]
+end
+
+to reproduce
+  ask turtles [
+    if energy > 50 [
+      set energy energy - birth-energy
+      hatch 1 [ set energy birth-energy ]
+    ]
+  ]
+end
+
+to check-death
+  ask turtles [
+    if energy <= 0 [ die ]
+  ]
+end
+
+to regrow-grass
+  ask patches [
+    if random 100 < 3 [ set pcolor green ]
+  ]
+end
 @#$#@#$#@
 GRAPHICS-WINDOW
 210
@@ -25,6 +93,137 @@ GRAPHICS-WINDOW
 1
 ticks
 30.0
+
+BUTTON
+32
+24
+98
+57
+NIL
+setup
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+BUTTON
+41
+75
+104
+108
+NIL
+go\n
+T
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+0
+
+MONITOR
+17
+134
+110
+179
+NIL
+count turtles
+17
+1
+11
+
+MONITOR
+28
+193
+263
+238
+NIL
+count patches with [pcolor = green]
+17
+1
+11
+
+SWITCH
+22
+262
+166
+295
+show-energy?
+show-energy?
+1
+1
+-1000
+
+PLOT
+22
+318
+222
+468
+Totals
+time
+totals
+0.0
+10.0
+0.0
+10.0
+true
+false
+"" ""
+PENS
+"default" 1.0 0 -16777216 true "" "plot count turtles"
+"pen-1" 1.0 0 -13840069 true "" "plot count patches with [pcolor = green]"
+
+SLIDER
+58
+250
+230
+283
+number
+number
+0
+100
+50
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+721
+46
+895
+79
+energy-from-grass
+energy-from-grass
+0
+100
+50
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+716
+142
+888
+175
+birth-energy
+birth-energy
+0
+100
+50
+1
+1
+NIL
+HORIZONTAL
 
 @#$#@#$#@
 ## WHAT IS IT?
