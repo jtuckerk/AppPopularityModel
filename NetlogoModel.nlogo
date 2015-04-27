@@ -1,4 +1,9 @@
-globals [numgroups]
+extensions [array]
+
+globals [numgroups 
+  groupSizes 
+  groupsHaveCount 
+  ]
 
 breed [groups group] 
 
@@ -41,6 +46,9 @@ to setup-patches
 end
 
 to setup-groups
+  set groupSizes array:from-list n-values 10 [0]
+  set groupsHaveCount array:from-list n-values 10 [0]
+  
   create-groups numgroups  
   ask groups [set group-utility random-normal 5 2] 
   ask groups [set group-funness random-normal 5 2] 
@@ -58,6 +66,7 @@ to setup-people
     set app? false
     set grouplist (list random numgroups random numgroups random numgroups)]
   ask people [set-characteristics-from-group]
+  print sentence "the size of the groups:" groupSizes
 end
 
 to set-characteristics-from-group
@@ -66,6 +75,12 @@ to set-characteristics-from-group
   let G1 group (item 0 grouplist)
   let G2 group (item 1 grouplist)
   let G3 group (item 2 grouplist)
+  
+  foreach [0 1 2 3 4 5 6 7 8 9] [
+    
+      if (member? ?1 grouplist) [array:set groupSizes ?1 (array:item groupSizes ?1 + 1)] ;;if not already talking?
+          
+        ]
 
   let locUtility1 [group-utility] of G1
   let locFun1 [group-funness] of G1
@@ -236,7 +251,7 @@ PLOT
 321
 206
 471
-Totals
+Totals Users With app
 time
 totals
 0.0
@@ -299,7 +314,7 @@ number-of-people
 number-of-people
 0
 300
-300
+99
 1
 1
 NIL
@@ -314,7 +329,7 @@ app-utility-rating
 app-utility-rating
 0
 10
-3
+6
 1
 1
 NIL
@@ -394,6 +409,24 @@ app-sharing-capability
 1
 NIL
 HORIZONTAL
+
+PLOT
+726
+366
+926
+516
+plot 1
+NIL
+NIL
+0.0
+10.0
+0.0
+10.0
+true
+false
+"" ""
+PENS
+"default" 1.0 0 -16777216 true "" "plot count turtles"
 
 @#$#@#$#@
 ## WHAT IS IT?
