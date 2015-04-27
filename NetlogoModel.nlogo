@@ -48,7 +48,6 @@ to setup
   setup-groups
   setup-people
   setup-people-with-app
-  count-initial
   ;;setup-patches-with-ads
   reset-ticks
 end
@@ -156,19 +155,20 @@ end
 to setup-people-with-app
   ;; just for testing, make a few random have app to start 
   ask people [
-    if (level-of-influence > 6) [set app? true set color yellow]
+    if (level-of-influence > 8) [set app? true set color yellow]
   ]
   
 end
 
-to count-initial
-ask people [ if (app?) [
-     foreach [0 1 2 3 4 5 6 7 8 9] [  
-      if (member? ?1 grouplist) [array:set groupsHaveCount ?1 (array:item groupsHaveCount ?1 + 1)]       
-        ]
-  ]
-]
+to start-one-person
 end
+
+to start-random-people
+end
+
+to start-group
+end 
+
 to setup-patches-with-ads
   
 end
@@ -200,7 +200,7 @@ to attempt-talk
     foreach grouplist [
       ;;show grouplist
       ask other people-here [
-      if (member? ? grouplist) [talk] ;;if not already talking?
+      if (member? ? grouplist) [talk] 
           ]
         ]
   ]
@@ -230,17 +230,19 @@ to get-app
      foreach [0 1 2 3 4 5 6 7 8 9] [  
       if (member? ?1 grouplist) [array:set groupsHaveCount ?1 (array:item groupsHaveCount ?1 + 1)]       
         ]
+     show groupsHaveCount
   ]
 end 
+
 
 @#$#@#$#@
 GRAPHICS-WINDOW
 261
 10
 700
-418
+470
 16
-14
+16
 13.0
 1
 10
@@ -253,8 +255,8 @@ GRAPHICS-WINDOW
 1
 -16
 16
--14
-14
+-16
+16
 0
 0
 1
@@ -389,7 +391,7 @@ app-utility-rating
 app-utility-rating
 0
 10
-6.6
+1.8
 .1
 1
 NIL
@@ -405,6 +407,7 @@ app-funness-rating
 0
 10
 5.9
+1.8
 .1
 1
 NIL
@@ -420,6 +423,7 @@ app-user-friendliness-rating
 0
 10
 2.3
+1.9
 .1
 1
 NIL
@@ -435,6 +439,7 @@ app-cost
 0
 10
 3
+1.4
 .1
 1
 NIL
@@ -450,6 +455,7 @@ app-sharing-necessity
 0
 10
 2.3
+2
 .1
 1
 NIL
@@ -465,6 +471,7 @@ app-sharing-capability
 0
 10
 2.8
+1.8
 .1
 1
 NIL
@@ -492,7 +499,7 @@ PENS
 "group 3" 1.0 0 -955883 true "" "plot (array:item groupsHaveCount 3 / array:item groupSizes 3 ) * 100"
 "group 4" 1.0 0 -6459832 true "" "plot (array:item groupsHaveCount 4 / array:item groupSizes 4 ) * 100"
 "group 5" 1.0 0 -1184463 true "" "plot (array:item groupsHaveCount 5 / array:item groupSizes 5 ) * 100"
-"group 6" 1.0 0 -10899396 true "" "plot (array:item groupsHaveCount 6 / array:item groupSizes 6 ) * 100"
+"group 6" 1.0 0 -10899396 true "" "plot (array:item groupsHaveCount 6 / array:item groupSizes 7 ) * 100"
 "group 7" 1.0 0 -13840069 true "" "plot (array:item groupsHaveCount 7 / array:item groupSizes 7) * 100"
 "group 8" 1.0 0 -14835848 true "" "plot (array:item groupsHaveCount 8 / array:item groupSizes 8 ) * 100"
 "group 9" 1.0 0 -11221820 true "" "plot (array:item groupsHaveCount 9 / array:item groupSizes 9 ) * 100"
