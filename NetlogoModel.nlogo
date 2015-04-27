@@ -36,17 +36,17 @@ turtles-own
   exposure-to-app
    ]
 
-
 to go
   if ticks >= 500 [ stop ]
   move-turtles
-
+  attempt-talk
   tick
 end
 
 to move-turtles
   ask turtles [
-    right random 360
+    right random 100
+    left random 100
     forward 1
   ]
 end
@@ -65,13 +65,10 @@ to setup-groups
       
 end
 
-
 to setup-turtles
   create-turtles number-of-turtles
   ask turtles [ setxy random-xcor random-ycor ]
   ask turtles [set grouplist (list random numgroups random numgroups random numgroups )]
-  
-  
 end
 
 to setup-turtles-with-app
@@ -87,7 +84,6 @@ to attempt-talk
 end
 
 to talk
-  
   
 end
 @#$#@#$#@
