@@ -2,7 +2,8 @@ extensions [array]
 
 globals [numgroups 
   groupSizes 
-  groupsHaveCount 
+  groupsHaveCount
+  person-talking-influence
   ]
 
 breed [groups group] 
@@ -147,7 +148,8 @@ end
 to attempt-talk
   ;;ask people [set color blue]
   ask people with [app?] 
-  [ foreach grouplist [
+  [ set person-talking-influence level-of-influence
+    foreach grouplist [
       ;;show grouplist
       ask other people-here [
       if (member? ? grouplist) [talk] ;;if not already talking?
@@ -188,8 +190,7 @@ to talk
   
   ;;An individual’s exposure score increases when he comes in contact with a fellow group member. 
   ;;The increase = “app score”/ 50 * influence score of the other individual. 
-  let local-influence ([level-of-influence] of people)
-  set exposure-to-app (exposure-to-app + app-score / 50 * local-influence)
+  set exposure-to-app (exposure-to-app + app-score / 50 * person-talking-influence)
 
   set get-score (app-score + exposure-to-app + app-sharing-capability + app-sharing-necessity)
 
@@ -200,8 +201,9 @@ to get-app
    set color orange
    
      foreach [0 1 2 3 4 5 6 7 8 9] [  
-      if (member? ?1 grouplist) [array:set groupsHaveCount  ?1 (array:item groupsHaveCount ?1 + 1)] ;;if not already talking?      
+      if (member? ?1 grouplist) [array:set groupsHaveCount ?1 (array:item groupsHaveCount ?1 + 1)] ;;if not already talking?      
         ]
+     show groupsHaveCount
 end 
 
 
@@ -346,7 +348,7 @@ number-of-people
 number-of-people
 0
 300
-166
+10
 1
 1
 NIL
@@ -376,7 +378,7 @@ app-funness-rating
 app-funness-rating
 0
 10
-3
+6
 1
 1
 NIL
@@ -406,7 +408,7 @@ app-cost
 app-cost
 0
 10
-3
+8
 1
 1
 NIL
@@ -436,7 +438,7 @@ app-sharing-capability
 app-sharing-capability
 0
 10
-3
+6
 1
 1
 NIL
@@ -447,9 +449,9 @@ PLOT
 366
 926
 516
-plot 1
-NIL
-NIL
+Percent group members have app
+time 
+percent
 0.0
 10.0
 0.0
@@ -458,7 +460,7 @@ true
 false
 "" ""
 PENS
-"default" 1.0 0 -16777216 true "" "plot count turtles"
+"default" 1.0 0 -16777216 true "" "plot (array:item groupsHaveCount 0 / array:item groupSizes 0 ) * 100"
 
 SWITCH
 718
