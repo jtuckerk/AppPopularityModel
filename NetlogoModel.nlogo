@@ -200,7 +200,7 @@ number-turtles-start-with-app
 number-turtles-start-with-app
 0
 100
-7
+1
 1
 1
 NIL
@@ -241,7 +241,7 @@ number-of-turtles
 number-of-turtles
 0
 300
-65
+50
 1
 1
 NIL
