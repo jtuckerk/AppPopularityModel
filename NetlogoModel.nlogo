@@ -1,4 +1,4 @@
-globals [numgroups othergroup]
+globals [numgroups]
 
 breed [groups group] 
 
@@ -45,6 +45,9 @@ to setup-groups
   ask groups [set group-cost random-normal 5 2]      
   ask groups [set group-userfriendliness random-normal 5 2] 
   ask groups [set group-level-of-influence random-normal 5 2] 
+  
+  ask groups [set grouplist (list random numgroups random numgroups random numgroups)]
+  ask groups [set color green]
 end
 
 to setup-turtles
@@ -79,17 +82,22 @@ end
 ;; If a turtle is on same patch as fellow group member, 
 ;; pass on app 
 to attempt-talk
-  ask turtles [
-  ask other turtles-here with [othergroup = grouplist] 
-      [ foreach grouplist [
-      if (member? ? othergroup) [talk]
-      ]
-      ]
+  ask turtles ;;with [app?] 
+  [ foreach grouplist [
+      ask other turtles-here [
+      if (member? ? grouplist) [talk] ;;[grouplist] of other turtles-here
+          ]
+        ]
   ]
 end
 
 to talk
-  ask turtles [set color red]
+  ;; if not already talking
+ ;; ask turtles [set color red]
+  set color red
+  set app? true 
+  
+  ;; at end, set color blue again 
   
 end
 @#$#@#$#@
