@@ -125,7 +125,7 @@ end
 to setup-people-with-app
   ;; just for testing, make a few random have app to start 
   ask people [
-    if (level-of-influence > 6) [set app? true set color yellow]
+    if (level-of-influence > 8) [set app? true set color yellow]
   ]
   
 end
@@ -377,7 +377,7 @@ app-utility-rating
 app-utility-rating
 0
 10
-10
+1.8
 .1
 1
 NIL
@@ -392,7 +392,7 @@ app-funness-rating
 app-funness-rating
 0
 10
-10
+1.8
 .1
 1
 NIL
@@ -407,7 +407,7 @@ app-user-friendliness-rating
 app-user-friendliness-rating
 0
 10
-10
+1.9
 .1
 1
 NIL
@@ -422,7 +422,7 @@ app-cost
 app-cost
 0
 10
-10
+1.4
 .1
 1
 NIL
@@ -437,7 +437,7 @@ app-sharing-necessity
 app-sharing-necessity
 0
 10
-10
+2
 .1
 1
 NIL
@@ -452,7 +452,7 @@ app-sharing-capability
 app-sharing-capability
 0
 10
-10
+1.8
 .1
 1
 NIL
