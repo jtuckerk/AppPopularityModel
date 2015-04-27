@@ -55,8 +55,13 @@ end
 to setup-people
   create-people number-of-people[ setxy random-xcor random-ycor 
     set color blue
+    set shape "person"
     set app? false
     set grouplist (list random numgroups random numgroups random numgroups)]
+  ask people [ 
+    if (show-groups?)
+    [set label grouplist ] 
+  ]
   ask people [set-characteristics-from-group]
 end
 
@@ -299,7 +304,7 @@ number-of-people
 number-of-people
 0
 300
-300
+50
 1
 1
 NIL
@@ -314,7 +319,7 @@ app-utility-rating
 app-utility-rating
 0
 10
-3
+5
 1
 1
 NIL
@@ -344,7 +349,7 @@ app-user-friendliness-rating
 app-user-friendliness-rating
 0
 10
-3
+5
 1
 1
 NIL
@@ -374,7 +379,7 @@ app-sharing-neccesity
 app-sharing-neccesity
 0
 10
-3
+5
 1
 1
 NIL
@@ -394,6 +399,17 @@ app-sharing-capability
 1
 NIL
 HORIZONTAL
+
+SWITCH
+718
+24
+851
+57
+show-groups?
+show-groups?
+0
+1
+-1000
 
 @#$#@#$#@
 ## WHAT IS IT?
