@@ -2,6 +2,8 @@ globals [numgroups]
 
 breed [groups group] 
 
+breed [people person]
+
 groups-own
 [
   group-utility
@@ -11,7 +13,7 @@ groups-own
   group-level-of-influence
 ]
 
-turtles-own
+people-own
  [
   grouplist
   app?
@@ -28,8 +30,8 @@ to setup
   set numgroups 10
   setup-patches
   setup-groups
-  setup-turtles
-  ;;setup-turtles-with-app
+  setup-people
+  ;;setup-people-with-app
   ;;setup-patches-with-ads
   reset-ticks
 end
@@ -46,18 +48,52 @@ to setup-groups
   ask groups [set group-userfriendliness random-normal 5 2] 
   ask groups [set group-level-of-influence random-normal 5 2] 
   
-  ask groups [set grouplist (list random numgroups random numgroups random numgroups)]
+  ;;ask groups [set grouplist (list random numgroups random numgroups random numgroups)]
   ask groups [set color green]
 end
 
-to setup-turtles
-  create-turtles number-of-turtles[ setxy random-xcor random-ycor 
+to setup-people
+  create-people number-of-people[ setxy random-xcor random-ycor 
     set color blue
     set grouplist (list random numgroups random numgroups random numgroups)]
- 
+  ask people [set-characteristics-from-group]
 end
 
-to setup-turtles-with-app
+to set-characteristics-from-group
+  
+  ;gets the group from the # in the grouplist 
+  let G1 group (item 0 grouplist)
+  let G2 group (item 1 grouplist)
+  let G3 group (item 2 grouplist)
+
+  let locUtility1 [group-utility] of G1
+  let locFun1 [group-funness] of G1
+  let locCost1 [group-cost] of G1
+  let locUserFriend1 [group-userfriendliness] of G1  
+  let locLevelInfluence1 [group-level-of-influence] of G1  
+  
+  let locUtility2 [group-utility] of G2
+  let locFun2 [group-funness] of G2
+  let locCost2 [group-cost] of G2
+  let locUserFriend2 [group-userfriendliness] of G2 
+  let locLevelInfluence2 [group-level-of-influence] of G2
+  
+  let locUtility3 [group-utility] of G3
+  let locFun3 [group-funness] of G3
+  let locCost3 [group-cost] of G3
+  let locUserFriend3 [group-userfriendliness] of G3
+  let locLevelInfluence3 [group-level-of-influence] of G3
+  
+  set importance-utility (locUtility1 + locUtility2 + locUtility3) / 3
+  set importance-funness (locFun3 + locFun3 + locFun3) / 3
+  set improtance-cost (locCost1 + locCost2 + locCost3) / 3
+  set importance-userfriendliness (locUserFriend1 + locUserFriend2 + locUserFriend3) / 3
+  set level-of-influence (locLevelInfluence1 + locLevelInfluence2 + locLevelInfluence3) / 3
+  set exposure-to-app 0
+  
+end
+
+to setup-people-with-app
   
 end
 
@@ -67,25 +103,27 @@ end
 
 to go
   ;;if ticks >= 500 [ stop ]
-  move-turtles
+  move-people
   attempt-talk
   tick
 end
 
-to move-turtles
-  ask turtles [
+to move-people
+  ask people [
     right random 360
     forward 1
   ]
 end
 
-;; If a turtle is on same patch as fellow group member, 
+;; If a person is on same patch as fellow group member, 
 ;; pass on app 
 to attempt-talk
-  ask turtles ;;with [app?] 
+  ask people [set color blue]
+  ask people ;;with [app?] 
   [ foreach grouplist [
-      ask other turtles-here [
-      if (member? ? grouplist) [talk] ;;[grouplist] of other turtles-here
+      show grouplist
+      ask other people-here [
+      if (member? ? grouplist) [talk ] ;;[grouplist] of other people-here
           ]
         ]
   ]
@@ -93,7 +131,7 @@ end
 
 to talk
   ;; if not already talking
- ;; ask turtles [set color red]
+ ;; ask people [set color red]
   set color red
   set app? true 
   
@@ -189,18 +227,18 @@ true
 false
 "" ""
 PENS
-"default" 1.0 0 -16777216 true "" "plot count turtles with [app? = true]"
+"default" 1.0 0 -16777216 true "" "plot count people with [app? = true]"
 
 SLIDER
 716
 203
-963
+964
 236
-number-turtles-start-with-app
-number-turtles-start-with-app
+number-people-start-with-app
+number-people-start-with-app
 0
 100
-1
+0
 1
 1
 NIL
@@ -224,10 +262,10 @@ HORIZONTAL
 SWITCH
 715
 169
-910
+911
 202
-start-turtles-with-app
-start-turtles-with-app
+start-people-with-app
+start-people-with-app
 1
 1
 -1000
@@ -237,11 +275,11 @@ SLIDER
 95
 888
 128
-number-of-turtles
-number-of-turtles
+number-of-people
+number-of-people
 0
 300
-50
+248
 1
 1
 NIL
