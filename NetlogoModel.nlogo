@@ -28,6 +28,8 @@ people-own
   importance-userfriendliness
   level-of-influence
   exposure-to-app
+  app-score
+  get-score
  ]
 
 to setup
@@ -63,8 +65,13 @@ end
 to setup-people
   create-people number-of-people[ setxy random-xcor random-ycor 
     set color blue
+    set shape "person"
     set app? false
     set grouplist (list random numgroups random numgroups random numgroups)]
+  ask people [ 
+    if (show-groups?)
+    [set label grouplist ] 
+  ]
   ask people [set-characteristics-from-group]
   print sentence "the size of the groups:" groupSizes
 end
@@ -153,6 +160,8 @@ end
 to talk
   ;; complicated matching stuff to see if app spreads 
   ;; if match, set color orange and app? true 
+  
+  ;; testing
   if (importance-utility < app-utility-rating) 
   or (importance-funness < app-funness-rating) 
   or (importance-userfriendliness < app-user-friendliness-rating) 
@@ -161,18 +170,33 @@ to talk
     set app? true 
   ]
   
+  ;; app-person = negative --> app-score =0
+  ;; app-person = 0 or positve --> app-score = ranking * score multiplier
+  ;; score-multiplier = sum of rankings for all importance factors/4
+  
+  let importance-rankings-sum (importance-utility + importance-funness + importance-userfriendliness + importance-cost)
+  let score-multiplier (importance-rankings-sum / 4)
+  
+  ifelse (app-utility-rating - importance-utility < 0) [set app-score 0] [set app-score importance-utility * score-multiplier]
+  
+  ifelse (app-funness-rating - importance-funness < 0) [set app-score 0] [set app-score importance-funness * score-multiplier]
+  
+  ifelse (app-user-friendliness-rating - importance-userfriendliness < 0) [set app-score 0] [set app-score importance-userfriendliness * score-multiplier]
+  
+  ifelse (app-cost - importance-cost < 0) [set app-score 0] [set app-score importance-cost * score-multiplier]
+  
+  ;;An individual’s exposure score increases when he comes in contact with a fellow group member. 
+  ;;The increase = “app score”/ 50 * influence score of the other individual. 
+  let local-influence ([level-of-influence] of people)
+  set exposure-to-app (exposure-to-app + app-score / 50 * local-influence)
 
-  ;;level-of-influence 
-  ;;exposure-to-app 
-  
-  ;;app-utility-rating
-  ;;app-funness-rating
-  ;;app-user-friendliness-rating
-  ;;app-cost
-  ;;app-sharing-necessity
-  ;;app-sharing-capability
-  
+  set get-score (app-score + exposure-to-app + app-sharing-capability + app-sharing-necessity)
+
 end
+
+
+
+
 @#$#@#$#@
 GRAPHICS-WINDOW
 261
@@ -314,7 +338,7 @@ number-of-people
 number-of-people
 0
 300
-99
+166
 1
 1
 NIL
@@ -329,7 +353,7 @@ app-utility-rating
 app-utility-rating
 0
 10
-6
+5
 1
 1
 NIL
@@ -359,7 +383,7 @@ app-user-friendliness-rating
 app-user-friendliness-rating
 0
 10
-3
+5
 1
 1
 NIL
@@ -385,11 +409,11 @@ SLIDER
 209
 249
 242
-app-sharing-neccesity
-app-sharing-neccesity
+app-sharing-necessity
+app-sharing-necessity
 0
 10
-3
+5
 1
 1
 NIL
@@ -427,6 +451,18 @@ false
 "" ""
 PENS
 "default" 1.0 0 -16777216 true "" "plot count turtles"
+
+SWITCH
+718
+24
+851
+57
+show-groups?
+show-groups?
+1
+1
+-1000
+
 
 @#$#@#$#@
 ## WHAT IS IT?
