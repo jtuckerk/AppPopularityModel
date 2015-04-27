@@ -1,6 +1,13 @@
+globals [numgroups]
+
+breed [groups group] 
+
 to setup
   clear-all
+  
+  set numgroups 10
   setup-patches
+  setup-groups
   setup-turtles
   
   setup-turtles-with-app
@@ -8,11 +15,25 @@ to setup
   reset-ticks
 end
 
+groups-own
+[
+  group-utility
+  group-funness
+  group-cost
+  group-userfriendliness
+  group-level-of-influence
+]
+
 turtles-own
  [
-  group
+  grouplist
   app?
-  
+  importance-utility
+  importance-funness
+  improtance-cost
+  importance-userfriendliness
+  level-of-influence
+  exposure-to-app
    ]
 
 
@@ -34,9 +55,23 @@ to setup-patches
   ask patches [ set pcolor green ]
 end
 
+to setup-groups
+  create-groups numgroups  
+  ask groups [set group-utility random-normal 5 2] 
+  ask groups [set group-funness random-normal 5 2] 
+  ask groups [set group-cost random-normal 5 2]      
+  ask groups [set group-userfriendliness random-normal 5 2] 
+  ask groups [set group-level-of-influence random-normal 5 2] 
+      
+end
+
+
 to setup-turtles
   create-turtles number-of-turtles
   ask turtles [ setxy random-xcor random-ycor ]
+  ask turtles [set grouplist (list random numgroups random numgroups random numgroups )]
+  
+  
 end
 
 to setup-turtles-with-app
@@ -205,7 +240,7 @@ HORIZONTAL
 SLIDER
 16
 71
-188
+248
 104
 app-utility-rating
 app-utility-rating
@@ -220,7 +255,7 @@ HORIZONTAL
 SLIDER
 17
 105
-194
+249
 138
 app-funness-rating
 app-funness-rating
@@ -240,8 +275,8 @@ SLIDER
 app-user-friendliness-rating
 app-user-friendliness-rating
 0
-100
-50
+10
+5
 1
 1
 NIL
@@ -250,7 +285,7 @@ HORIZONTAL
 SLIDER
 15
 175
-187
+250
 208
 app-cost
 app-cost
@@ -265,7 +300,7 @@ HORIZONTAL
 SLIDER
 15
 209
-210
+249
 242
 app-sharing-neccesity
 app-sharing-neccesity
@@ -280,7 +315,7 @@ HORIZONTAL
 SLIDER
 16
 243
-212
+249
 276
 app-sharing-capability
 app-sharing-capability
