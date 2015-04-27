@@ -19,7 +19,7 @@ people-own
   app?
   importance-utility
   importance-funness
-  improtance-cost
+  importance-cost
   importance-userfriendliness
   level-of-influence
   exposure-to-app
@@ -87,7 +87,7 @@ to set-characteristics-from-group
   
   set importance-utility (locUtility1 + locUtility2 + locUtility3) / 3
   set importance-funness (locFun3 + locFun3 + locFun3) / 3
-  set improtance-cost (locCost1 + locCost2 + locCost3) / 3
+  set importance-cost (locCost1 + locCost2 + locCost3) / 3
   set importance-userfriendliness (locUserFriend1 + locUserFriend2 + locUserFriend3) / 3
   set level-of-influence (locLevelInfluence1 + locLevelInfluence2 + locLevelInfluence3) / 3
   set exposure-to-app 0
@@ -107,7 +107,7 @@ to setup-patches-with-ads
 end
 
 to go
-  ;;if ticks >= 500 [ stop ]
+  ;;if ticks >= 500 [ stop ] ;;we want to run until steady state
   move-people
   attempt-talk
   tick
@@ -137,8 +137,25 @@ end
 ;; if other doesn't have app and is a match, pass it on
 to talk
   ;; complicated matching stuff to see if app spreads 
-  set color yellow ;;red
-  set app? true 
+  ;; if match, set color orange and app? true 
+  if (importance-utility < app-utility-rating) 
+  or (importance-funness < app-funness-rating) 
+  or (importance-userfriendliness < app-user-friendliness-rating) 
+  or (importance-cost < app-cost) [
+    set color orange
+    set app? true 
+  ]
+  
+
+  ;;level-of-influence 
+  ;;exposure-to-app 
+  
+  ;;app-utility-rating
+  ;;app-funness-rating
+  ;;app-user-friendliness-rating
+  ;;app-cost
+  ;;app-sharing-necessity
+  ;;app-sharing-capability
   
 end
 @#$#@#$#@
@@ -282,7 +299,7 @@ number-of-people
 number-of-people
 0
 300
-50
+300
 1
 1
 NIL
@@ -297,7 +314,7 @@ app-utility-rating
 app-utility-rating
 0
 10
-5
+3
 1
 1
 NIL
@@ -312,7 +329,7 @@ app-funness-rating
 app-funness-rating
 0
 10
-5
+3
 1
 1
 NIL
@@ -327,7 +344,7 @@ app-user-friendliness-rating
 app-user-friendliness-rating
 0
 10
-5
+3
 1
 1
 NIL
@@ -342,7 +359,7 @@ app-cost
 app-cost
 0
 10
-5
+3
 1
 1
 NIL
@@ -357,7 +374,7 @@ app-sharing-neccesity
 app-sharing-neccesity
 0
 10
-5
+3
 1
 1
 NIL
@@ -372,7 +389,7 @@ app-sharing-capability
 app-sharing-capability
 0
 10
-5
+3
 1
 1
 NIL
