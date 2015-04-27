@@ -4,8 +4,6 @@ globals [numgroups
   groupSizes 
   groupsHaveCount
   person-talking-influence
-  never-get-threshold
-  get-threshold
   ]
 
 breed [groups group] 
@@ -34,12 +32,12 @@ people-own
   app-score
   get-score
  ]
-
+to step
+  go
+end
 to setup
   clear-all
   set numgroups 10
-  set never-get-threshold 40
-  set get-threshold 100
   setup-patches
   setup-groups
   setup-people
@@ -72,13 +70,8 @@ to setup-people
     set color blue
     set shape "person"
     set app? false
-    set app-score 0
-    set get-score 0
     set grouplist (list random numgroups random numgroups random numgroups)]
-  ask people [ 
-    if (show-groups?)
-    [set label grouplist ] 
-  ]
+
   ask people [set-characteristics-from-group]
   print sentence "the size of the groups:" groupSizes
 end
@@ -126,20 +119,10 @@ end
 to setup-people-with-app
   ;; just for testing, make a few random have app to start 
   ask people [
-    if (level-of-influence > 6) [set app? true set color yellow]
+    if (level-of-influence > 8) [set app? true set color yellow]
   ]
   
-  ;; one group starts with it
-  ;; one person starts with it
-  ;; random people start with it (with number selected: number-people-start-with-app)
-  
 end
-
-to one-person-starts
-  
-end 
-
-to 
 
 to setup-patches-with-ads
   
@@ -153,7 +136,11 @@ to go
 end
 
 to move-people
+
   ask people [
+    ifelse (show-groups?)
+     [set label grouplist ]
+     [set label ""]
     right random 360
     forward 1
   ]
@@ -180,12 +167,12 @@ to talk
   ;; if match, set color orange and app? true 
   
   ;; testing
- ;; if (importance-utility < app-utility-rating) 
- ;; or (importance-funness < app-funness-rating) 
- ;; or (importance-userfriendliness < app-user-friendliness-rating) 
- ;; or (importance-cost < app-cost) [
-   ;; get-app 
- ;; ]
+  if (importance-utility < app-utility-rating) 
+  or (importance-funness < app-funness-rating) 
+  or (importance-userfriendliness < app-user-friendliness-rating) 
+  or (importance-cost < app-cost) [
+    get-app
+  ]
   
   ;; app-person = negative --> app-score =0
   ;; app-person = 0 or positve --> app-score = ranking * score multiplier
@@ -202,31 +189,27 @@ to talk
   
   ifelse (app-cost - importance-cost < 0) [set app-score 0] [set app-score importance-cost * score-multiplier]
   
-  ;; never get the app if app-score below never-get-threshold 
-  if (app-score > never-get-threshold) [
-  
   ;;An individual’s exposure score increases when he comes in contact with a fellow group member. 
   ;;The increase = “app score”/ 50 * influence score of the other individual. 
   set exposure-to-app (exposure-to-app + app-score / 50 * person-talking-influence)
 
-  ;; get score = app-score + exposure + sharing-capabilities + sharing-necessities 
   set get-score (app-score + exposure-to-app + app-sharing-capability + app-sharing-necessity)
-  
-  ;; get the app if the get score is above the threshold 
-  if (get-score > get-threshold) [get-app]
-]
 
 end
 
 to get-app
+  if (not app?) [
    set app? true 
    set color orange
    
      foreach [0 1 2 3 4 5 6 7 8 9] [  
-      if (member? ?1 grouplist) [array:set groupsHaveCount ?1 (array:item groupsHaveCount ?1 + 1)] ;;if not already talking?      
+      if (member? ?1 grouplist) [array:set groupsHaveCount ?1 (array:item groupsHaveCount ?1 + 1)]       
         ]
      show groupsHaveCount
+  ]
 end 
+
+
 
 @#$#@#$#@
 GRAPHICS-WINDOW
@@ -369,7 +352,7 @@ number-of-people
 number-of-people
 0
 300
-300
+193
 1
 1
 NIL
@@ -384,8 +367,8 @@ app-utility-rating
 app-utility-rating
 0
 10
-10
-1
+4.9
+.1
 1
 NIL
 HORIZONTAL
@@ -399,8 +382,8 @@ app-funness-rating
 app-funness-rating
 0
 10
-10
-1
+1.4
+.1
 1
 NIL
 HORIZONTAL
@@ -414,8 +397,8 @@ app-user-friendliness-rating
 app-user-friendliness-rating
 0
 10
-10
-1
+1.7
+.1
 1
 NIL
 HORIZONTAL
@@ -429,8 +412,8 @@ app-cost
 app-cost
 0
 10
-10
-1
+2.9
+.1
 1
 NIL
 HORIZONTAL
@@ -444,8 +427,8 @@ app-sharing-necessity
 app-sharing-necessity
 0
 10
-10
-1
+2.4
+.1
 1
 NIL
 HORIZONTAL
@@ -460,7 +443,7 @@ app-sharing-capability
 0
 10
 10
-1
+.1
 1
 NIL
 HORIZONTAL
@@ -468,8 +451,8 @@ HORIZONTAL
 PLOT
 726
 366
-926
-516
+1136
+596
 Percent group members have app
 time 
 percent
@@ -478,10 +461,19 @@ percent
 0.0
 10.0
 true
-false
+true
 "" ""
 PENS
-"default" 1.0 0 -16777216 true "" "plot (array:item groupsHaveCount 0 / array:item groupSizes 0 ) * 100"
+"group 0" 1.0 0 -16777216 true "" "plot (array:item groupsHaveCount 0 / array:item groupSizes 0 ) * 100"
+"group 1" 1.0 0 -7500403 true "" "plot (array:item groupsHaveCount 1 / array:item groupSizes 1 ) * 100"
+"group 2" 1.0 0 -2674135 true "" "plot (array:item groupsHaveCount 2 / array:item groupSizes 2 ) * 100"
+"group 3" 1.0 0 -955883 true "" "plot (array:item groupsHaveCount 3 / array:item groupSizes 3 ) * 100"
+"group 4" 1.0 0 -6459832 true "" "plot (array:item groupsHaveCount 4 / array:item groupSizes 4 ) * 100"
+"group 5" 1.0 0 -1184463 true "" "plot (array:item groupsHaveCount 5 / array:item groupSizes 5 ) * 100"
+"group 6" 1.0 0 -10899396 true "" "plot (array:item groupsHaveCount 6 / array:item groupSizes 7 ) * 100"
+"group 7" 1.0 0 -13840069 true "" "plot (array:item groupsHaveCount 7 / array:item groupSizes 7) * 100"
+"group 8" 1.0 0 -14835848 true "" "plot (array:item groupsHaveCount 8 / array:item groupSizes 8 ) * 100"
+"group 9" 1.0 0 -11221820 true "" "plot (array:item groupsHaveCount 9 / array:item groupSizes 9 ) * 100"
 
 SWITCH
 718
@@ -493,6 +485,30 @@ show-groups?
 1
 1
 -1000
+
+OUTPUT
+279
+492
+519
+546
+12
+
+BUTTON
+159
+16
+222
+49
+NIL
+step
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
 
 @#$#@#$#@
 ## WHAT IS IT?
