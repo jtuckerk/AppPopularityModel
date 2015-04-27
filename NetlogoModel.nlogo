@@ -126,10 +126,20 @@ end
 to setup-people-with-app
   ;; just for testing, make a few random have app to start 
   ask people [
-    if (level-of-influence > 8) [set app? true set color yellow]
+    if (level-of-influence > 6) [set app? true set color yellow]
   ]
   
+  ;; one group starts with it
+  ;; one person starts with it
+  ;; random people start with it (with number selected: number-people-start-with-app)
+  
 end
+
+to one-person-starts
+  
+end 
+
+to 
 
 to setup-patches-with-ads
   
@@ -359,7 +369,7 @@ number-of-people
 number-of-people
 0
 300
-10
+300
 1
 1
 NIL
@@ -374,7 +384,7 @@ app-utility-rating
 app-utility-rating
 0
 10
-5
+10
 1
 1
 NIL
@@ -389,7 +399,7 @@ app-funness-rating
 app-funness-rating
 0
 10
-6
+10
 1
 1
 NIL
@@ -404,7 +414,7 @@ app-user-friendliness-rating
 app-user-friendliness-rating
 0
 10
-5
+10
 1
 1
 NIL
@@ -419,7 +429,7 @@ app-cost
 app-cost
 0
 10
-8
+10
 1
 1
 NIL
@@ -434,7 +444,7 @@ app-sharing-necessity
 app-sharing-necessity
 0
 10
-5
+10
 1
 1
 NIL
@@ -449,7 +459,7 @@ app-sharing-capability
 app-sharing-capability
 0
 10
-6
+10
 1
 1
 NIL
@@ -480,7 +490,7 @@ SWITCH
 57
 show-groups?
 show-groups?
-0
+1
 1
 -1000
 
