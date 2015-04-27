@@ -31,7 +31,7 @@ to setup
   setup-patches
   setup-groups
   setup-people
-  ;;setup-people-with-app
+  setup-people-with-app
   ;;setup-patches-with-ads
   reset-ticks
 end
@@ -55,6 +55,7 @@ end
 to setup-people
   create-people number-of-people[ setxy random-xcor random-ycor 
     set color blue
+    set app? false
     set grouplist (list random numgroups random numgroups random numgroups)]
   ask people [set-characteristics-from-group]
 end
@@ -94,6 +95,10 @@ to set-characteristics-from-group
 end
 
 to setup-people-with-app
+  ;; just for testing, make a few random have app to start 
+  ask people [
+    if (level-of-influence > 8) [set app? true set color yellow]
+  ]
   
 end
 
@@ -118,12 +123,12 @@ end
 ;; If a person is on same patch as fellow group member, 
 ;; try to talk  
 to attempt-talk
-  ask people [set color blue]
-  ask people ;;with [app?] 
+  ;;ask people [set color blue]
+  ask people with [app?] 
   [ foreach grouplist [
-      show grouplist
+      ;;show grouplist
       ask other people-here [
-      if (member? ? grouplist) [talk] ;;if not already talking
+      if (member? ? grouplist) [talk] ;;if not already talking?
           ]
         ]
   ]
@@ -132,10 +137,8 @@ end
 ;; if other doesn't have app and is a match, pass it on
 to talk
   ;; complicated matching stuff to see if app spreads 
-  set color red
+  set color yellow ;;red
   set app? true 
-  
-  ;; at end, set color blue again 
   
 end
 @#$#@#$#@
