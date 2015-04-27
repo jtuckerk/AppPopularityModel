@@ -37,6 +37,7 @@ people-own
  
 to step
   go
+  ask people [app-score-get]
 end
 
 to setup
@@ -48,6 +49,7 @@ to setup
   setup-groups
   setup-people
   setup-people-with-app
+  count-initial
   ;;setup-patches-with-ads
   reset-ticks
 end
@@ -61,6 +63,7 @@ to setup-groups
   set groupsHaveCount array:from-list n-values 10 [0]
   
   create-groups numgroups  
+  random-seed 137
   ask groups [set group-utility random-normal 5 2] 
   ask groups [set group-funness random-normal 5 2] 
   ask groups [set group-cost random-normal 5 2]      
@@ -155,20 +158,19 @@ end
 to setup-people-with-app
   ;; just for testing, make a few random have app to start 
   ask people [
-    if (level-of-influence > 8) [set app? true set color yellow]
+    if (level-of-influence > 6) [set app? true set color yellow]
   ]
   
 end
 
-to start-one-person
+to count-initial
+ask people [ if (app?) [
+     foreach [0 1 2 3 4 5 6 7 8 9] [  
+      if (member? ?1 grouplist) [array:set groupsHaveCount ?1 (array:item groupsHaveCount ?1 + 1)]       
+        ]
+  ]
+]
 end
-
-to start-random-people
-end
-
-to start-group
-end 
-
 to setup-patches-with-ads
   
 end
@@ -200,7 +202,7 @@ to attempt-talk
     foreach grouplist [
       ;;show grouplist
       ask other people-here [
-      if (member? ? grouplist) [talk] 
+      if (member? ? grouplist) [talk] ;;if not already talking?
           ]
         ]
   ]
@@ -230,19 +232,17 @@ to get-app
      foreach [0 1 2 3 4 5 6 7 8 9] [  
       if (member? ?1 grouplist) [array:set groupsHaveCount ?1 (array:item groupsHaveCount ?1 + 1)]       
         ]
-     show groupsHaveCount
   ]
 end 
-
 
 @#$#@#$#@
 GRAPHICS-WINDOW
 261
 10
 700
-470
+418
 16
-16
+14
 13.0
 1
 10
@@ -255,8 +255,8 @@ GRAPHICS-WINDOW
 1
 -16
 16
--16
-16
+-14
+14
 0
 0
 1
@@ -296,17 +296,6 @@ NIL
 NIL
 NIL
 0
-
-SWITCH
-718
-274
-870
-307
-start-with-ads?
-start-with-ads?
-1
-1
--1000
 
 PLOT
 6
@@ -376,7 +365,7 @@ number-of-people
 number-of-people
 0
 300
-139
+201
 1
 1
 NIL
@@ -391,7 +380,7 @@ app-utility-rating
 app-utility-rating
 0
 10
-1.8
+9.8
 .1
 1
 NIL
@@ -406,8 +395,7 @@ app-funness-rating
 app-funness-rating
 0
 10
-5.9
-1.8
+0.6
 .1
 1
 NIL
@@ -422,8 +410,7 @@ app-user-friendliness-rating
 app-user-friendliness-rating
 0
 10
-2.3
-1.9
+0.7
 .1
 1
 NIL
@@ -438,8 +425,7 @@ app-cost
 app-cost
 0
 10
-3
-1.4
+0.9
 .1
 1
 NIL
@@ -454,8 +440,7 @@ app-sharing-necessity
 app-sharing-necessity
 0
 10
-2.3
-2
+1.1
 .1
 1
 NIL
@@ -470,8 +455,7 @@ app-sharing-capability
 app-sharing-capability
 0
 10
-2.8
-1.8
+1.9
 .1
 1
 NIL
@@ -499,7 +483,7 @@ PENS
 "group 3" 1.0 0 -955883 true "" "plot (array:item groupsHaveCount 3 / array:item groupSizes 3 ) * 100"
 "group 4" 1.0 0 -6459832 true "" "plot (array:item groupsHaveCount 4 / array:item groupSizes 4 ) * 100"
 "group 5" 1.0 0 -1184463 true "" "plot (array:item groupsHaveCount 5 / array:item groupSizes 5 ) * 100"
-"group 6" 1.0 0 -10899396 true "" "plot (array:item groupsHaveCount 6 / array:item groupSizes 7 ) * 100"
+"group 6" 1.0 0 -10899396 true "" "plot (array:item groupsHaveCount 6 / array:item groupSizes 6 ) * 100"
 "group 7" 1.0 0 -13840069 true "" "plot (array:item groupsHaveCount 7 / array:item groupSizes 7) * 100"
 "group 8" 1.0 0 -14835848 true "" "plot (array:item groupsHaveCount 8 / array:item groupSizes 8 ) * 100"
 "group 9" 1.0 0 -11221820 true "" "plot (array:item groupsHaveCount 9 / array:item groupSizes 9 ) * 100"
@@ -531,6 +515,16 @@ NIL
 NIL
 NIL
 1
+
+CHOOSER
+963
+48
+1101
+93
+startChoice
+startChoice
+"singleUser" "advertisement" "group"
+2
 
 @#$#@#$#@
 ## WHAT IS IT?
