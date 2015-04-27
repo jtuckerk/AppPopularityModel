@@ -166,8 +166,9 @@ to talk
   or (importance-funness < app-funness-rating) 
   or (importance-userfriendliness < app-user-friendliness-rating) 
   or (importance-cost < app-cost) [
-    set color orange
-    set app? true 
+    ;;set color orange
+    ;;set app? true
+    get-app 
   ]
   
   ;; app-person = negative --> app-score =0
@@ -202,7 +203,6 @@ to get-app
       if (member? ?1 grouplist) [array:set groupsHaveCount  ?1 (array:item groupsHaveCount ?1 + 1)] ;;if not already talking?      
         ]
 end 
-
 
 
 @#$#@#$#@
