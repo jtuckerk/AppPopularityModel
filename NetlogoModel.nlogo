@@ -194,6 +194,14 @@ to talk
 
 end
 
+to get-app
+   set app? true 
+   set color orange
+   
+     foreach [0 1 2 3 4 5 6 7 8 9] [  
+      if (member? ?1 grouplist) [array:set groupsHaveCount  ?1 (array:item groupsHaveCount ?1 + 1)] ;;if not already talking?      
+        ]
+end 
 
 
 
@@ -462,7 +470,6 @@ show-groups?
 1
 1
 -1000
-
 
 @#$#@#$#@
 ## WHAT IS IT?
