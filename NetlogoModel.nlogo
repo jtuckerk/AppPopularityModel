@@ -4,6 +4,8 @@ globals [numgroups
   groupSizes 
   groupsHaveCount
   person-talking-influence
+  never-get-threshold
+  get-threshold
   ]
 
 breed [groups group] 
@@ -36,6 +38,8 @@ people-own
 to setup
   clear-all
   set numgroups 10
+  set never-get-threshold 40
+  set get-threshold 100
   setup-patches
   setup-groups
   setup-people
@@ -68,6 +72,8 @@ to setup-people
     set color blue
     set shape "person"
     set app? false
+    set app-score 0
+    set get-score 0
     set grouplist (list random numgroups random numgroups random numgroups)]
   ask people [ 
     if (show-groups?)
@@ -164,14 +170,12 @@ to talk
   ;; if match, set color orange and app? true 
   
   ;; testing
-  if (importance-utility < app-utility-rating) 
-  or (importance-funness < app-funness-rating) 
-  or (importance-userfriendliness < app-user-friendliness-rating) 
-  or (importance-cost < app-cost) [
-    ;;set color orange
-    ;;set app? true
-    get-app 
-  ]
+ ;; if (importance-utility < app-utility-rating) 
+ ;; or (importance-funness < app-funness-rating) 
+ ;; or (importance-userfriendliness < app-user-friendliness-rating) 
+ ;; or (importance-cost < app-cost) [
+   ;; get-app 
+ ;; ]
   
   ;; app-person = negative --> app-score =0
   ;; app-person = 0 or positve --> app-score = ranking * score multiplier
@@ -188,11 +192,19 @@ to talk
   
   ifelse (app-cost - importance-cost < 0) [set app-score 0] [set app-score importance-cost * score-multiplier]
   
+  ;; never get the app if app-score below never-get-threshold 
+  if (app-score > never-get-threshold) [
+  
   ;;An individual’s exposure score increases when he comes in contact with a fellow group member. 
   ;;The increase = “app score”/ 50 * influence score of the other individual. 
   set exposure-to-app (exposure-to-app + app-score / 50 * person-talking-influence)
 
+  ;; get score = app-score + exposure + sharing-capabilities + sharing-necessities 
   set get-score (app-score + exposure-to-app + app-sharing-capability + app-sharing-necessity)
+  
+  ;; get the app if the get score is above the threshold 
+  if (get-score > get-threshold) [get-app]
+]
 
 end
 
@@ -205,7 +217,6 @@ to get-app
         ]
      show groupsHaveCount
 end 
-
 
 @#$#@#$#@
 GRAPHICS-WINDOW
@@ -469,7 +480,7 @@ SWITCH
 57
 show-groups?
 show-groups?
-1
+0
 1
 -1000
 
