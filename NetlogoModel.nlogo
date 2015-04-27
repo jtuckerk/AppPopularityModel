@@ -1,19 +1,6 @@
-globals [numgroups]
+globals [numgroups othergroup]
 
 breed [groups group] 
-
-to setup
-  clear-all
-  
-  set numgroups 10
-  setup-patches
-  setup-groups
-  setup-turtles
-  
-  setup-turtles-with-app
-  ;;setup-patches-with-ads
-  reset-ticks
-end
 
 groups-own
 [
@@ -34,21 +21,17 @@ turtles-own
   importance-userfriendliness
   level-of-influence
   exposure-to-app
-   ]
+ ]
 
-to go
-  if ticks >= 500 [ stop ]
-  move-turtles
-  attempt-talk
-  tick
-end
-
-to move-turtles
-  ask turtles [
-    right random 100
-    left random 100
-    forward 1
-  ]
+to setup
+  clear-all
+  set numgroups 10
+  setup-patches
+  setup-groups
+  setup-turtles
+  ;;setup-turtles-with-app
+  ;;setup-patches-with-ads
+  reset-ticks
 end
 
 to setup-patches
@@ -62,13 +45,13 @@ to setup-groups
   ask groups [set group-cost random-normal 5 2]      
   ask groups [set group-userfriendliness random-normal 5 2] 
   ask groups [set group-level-of-influence random-normal 5 2] 
-      
 end
 
 to setup-turtles
-  create-turtles number-of-turtles
-  ask turtles [ setxy random-xcor random-ycor ]
-  ask turtles [set grouplist (list random numgroups random numgroups random numgroups )]
+  create-turtles number-of-turtles[ setxy random-xcor random-ycor 
+    set color blue
+    set grouplist (list random numgroups random numgroups random numgroups)]
+ 
 end
 
 to setup-turtles-with-app
@@ -79,11 +62,34 @@ to setup-patches-with-ads
   
 end
 
+to go
+  ;;if ticks >= 500 [ stop ]
+  move-turtles
+  attempt-talk
+  tick
+end
+
+to move-turtles
+  ask turtles [
+    right random 360
+    forward 1
+  ]
+end
+
+;; If a turtle is on same patch as fellow group member, 
+;; pass on app 
 to attempt-talk
-  
+  ask turtles [
+  ask other turtles-here with [othergroup = grouplist] 
+      [ foreach grouplist [
+      if (member? ? othergroup) [talk]
+      ]
+      ]
+  ]
 end
 
 to talk
+  ask turtles [set color red]
   
 end
 @#$#@#$#@
@@ -186,7 +192,7 @@ number-turtles-start-with-app
 number-turtles-start-with-app
 0
 100
-1
+7
 1
 1
 NIL
@@ -227,7 +233,7 @@ number-of-turtles
 number-of-turtles
 0
 300
-50
+65
 1
 1
 NIL
