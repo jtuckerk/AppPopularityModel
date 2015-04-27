@@ -37,8 +37,6 @@ people-own
  
 to step
   go
-  show sentence "# in group have" groupsHaveCount
-  show sentence "size of groups" groupSizes
 end
 
 to setup
@@ -72,6 +70,7 @@ to setup-groups
   
   ;;ask groups [set grouplist (list random numgroups random numgroups random numgroups)]
   ask groups [set color green]
+  show-group-characteristics
 end
 
 to setup-people
@@ -123,7 +122,36 @@ to set-characteristics-from-group
   set level-of-influence (locLevelInfluence1 + locLevelInfluence2 + locLevelInfluence3) / 3
   set exposure-to-app 0
   
+  app-score-get
+  
 end
+
+to app-score-get
+  
+  ;; app-person = negative --> app-score =0
+  ;; app-person = 0 or positve --> app-score = ranking * score multiplier
+  ;; score-multiplier = sum of rankings for all importance factors/4
+  
+  set app-score 0
+  let importance-rankings-sum (importance-utility + importance-funness + importance-userfriendliness + importance-cost)
+  let score-multiplier (importance-rankings-sum / 4)
+  
+  if (app-utility-rating - importance-utility >= 0)  [set app-score (app-score + importance-utility * score-multiplier)]
+  
+  if (app-funness-rating - importance-funness >= 0)  [set app-score (app-score + importance-funness * score-multiplier)]
+  
+  if (app-user-friendliness-rating - importance-userfriendliness >= 0) [set app-score (app-score + importance-userfriendliness * score-multiplier)]
+  
+  if (app-cost - importance-cost >= 0)  [set app-score (app-score + importance-cost * score-multiplier)]
+end 
+
+to show-group-characteristics
+  ask groups[
+   show (sentence "utility: " group-utility " fun: " group-funness " cost: " group-cost " userFriendly: " group-userfriendliness " Influence: "group-level-of-influence)
+  ]
+end
+  
+  
 
 to setup-people-with-app
   ;; just for testing, make a few random have app to start 
@@ -180,32 +208,7 @@ end
 
 ;; if other doesn't have app and is a match, pass it on
 to talk
-  ;; complicated matching stuff to see if app spreads 
-  ;; if match, set color orange and app? true 
-  
-  ;; testing
- ;; if (importance-utility < app-utility-rating) 
-  ;;or (importance-funness < app-funness-rating) 
-  ;;or (importance-userfriendliness < app-user-friendliness-rating) 
-  ;;or (importance-cost < app-cost) [
-  ;;  get-app
-  ;;]
-  
-  ;; app-person = negative --> app-score =0
-  ;; app-person = 0 or positve --> app-score = ranking * score multiplier
-  ;; score-multiplier = sum of rankings for all importance factors/4
-  
-  let importance-rankings-sum (importance-utility + importance-funness + importance-userfriendliness + importance-cost)
-  let score-multiplier (importance-rankings-sum / 4)
-  
-  if (app-utility-rating - importance-utility >= 0)  [set app-score (app-score + importance-utility * score-multiplier)]
-  
-  if (app-funness-rating - importance-funness >= 0)  [set app-score (app-score + importance-funness * score-multiplier)]
-  
-  if (app-user-friendliness-rating - importance-userfriendliness >= 0) [set app-score (app-score + importance-userfriendliness * score-multiplier)]
-  
-  if (app-cost - importance-cost >= 0)  [set app-score (app-score + importance-cost * score-multiplier)]
-  
+
   if (app-score > never-get-threshold) [
   
   ;;An individual’s exposure score increases when he comes in contact with a fellow group member. 
@@ -371,7 +374,7 @@ number-of-people
 number-of-people
 0
 300
-300
+139
 1
 1
 NIL
@@ -386,7 +389,7 @@ app-utility-rating
 app-utility-rating
 0
 10
-7.5
+6.6
 .1
 1
 NIL
@@ -401,7 +404,7 @@ app-funness-rating
 app-funness-rating
 0
 10
-5
+5.9
 .1
 1
 NIL
@@ -416,7 +419,7 @@ app-user-friendliness-rating
 app-user-friendliness-rating
 0
 10
-10
+2.3
 .1
 1
 NIL
@@ -431,7 +434,7 @@ app-cost
 app-cost
 0
 10
-10
+3
 .1
 1
 NIL
@@ -446,7 +449,7 @@ app-sharing-necessity
 app-sharing-necessity
 0
 10
-10
+2.3
 .1
 1
 NIL
@@ -461,7 +464,7 @@ app-sharing-capability
 app-sharing-capability
 0
 10
-10
+2.8
 .1
 1
 NIL
@@ -504,13 +507,6 @@ show-groups?
 1
 1
 -1000
-
-OUTPUT
-279
-492
-519
-546
-12
 
 BUTTON
 159
