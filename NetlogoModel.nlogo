@@ -130,6 +130,15 @@ to setup-people-with-app
   
 end
 
+to start-one-person
+end
+
+to start-random-people
+end
+
+to start-group
+end 
+
 to setup-patches-with-ads
   
 end
@@ -161,7 +170,7 @@ to attempt-talk
     foreach grouplist [
       ;;show grouplist
       ask other people-here [
-      if (member? ? grouplist) [talk] ;;if not already talking?
+      if (member? ? grouplist) [talk] 
           ]
         ]
   ]
@@ -169,17 +178,6 @@ end
 
 ;; if other doesn't have app and is a match, pass it on
 to talk
-  ;; complicated matching stuff to see if app spreads 
-  ;; if match, set color orange and app? true 
-  
-  ;; testing
- ;; if (importance-utility < app-utility-rating) 
-  ;;or (importance-funness < app-funness-rating) 
-  ;;or (importance-userfriendliness < app-user-friendliness-rating) 
-  ;;or (importance-cost < app-cost) [
-  ;;  get-app
-  ;;]
-  
   ;; app - person = negative --> app-score =0
   ;; app - person = 0 or positve --> app-score = ranking * score multiplier
   ;; score-multiplier = sum of rankings for all importance factors/4
