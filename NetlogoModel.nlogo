@@ -125,7 +125,7 @@ end
 to setup-people-with-app
   ;; just for testing, make a few random have app to start 
   ask people [
-    if (level-of-influence > 8) [set app? true set color yellow]
+    if (level-of-influence > 6) [set app? true set color yellow]
   ]
   
 end
@@ -187,13 +187,13 @@ to talk
   let importance-rankings-sum (importance-utility + importance-funness + importance-userfriendliness + importance-cost)
   let score-multiplier (importance-rankings-sum / 4)
   
-  ifelse (app-utility-rating - importance-utility < 0) [set app-score 0] [set app-score importance-utility * score-multiplier]
+  if (app-utility-rating - importance-utility >= 0)  [set app-score (app-score + importance-utility * score-multiplier)]
   
-  ifelse (app-funness-rating - importance-funness < 0) [set app-score 0] [set app-score importance-funness * score-multiplier]
+  if (app-funness-rating - importance-funness >= 0)  [set app-score (app-score + importance-funness * score-multiplier)]
   
-  ifelse (app-user-friendliness-rating - importance-userfriendliness < 0) [set app-score 0] [set app-score importance-userfriendliness * score-multiplier]
+  if (app-user-friendliness-rating - importance-userfriendliness >= 0) [set app-score (app-score + importance-userfriendliness * score-multiplier)]
   
-  ifelse (app-cost - importance-cost < 0) [set app-score 0] [set app-score importance-cost * score-multiplier]
+  if (app-cost - importance-cost >= 0)  [set app-score (app-score + importance-cost * score-multiplier)]
   
   if (app-score > never-get-threshold) [
   
@@ -362,7 +362,7 @@ number-of-people
 number-of-people
 0
 300
-193
+300
 1
 1
 NIL
@@ -377,7 +377,7 @@ app-utility-rating
 app-utility-rating
 0
 10
-4.9
+10
 .1
 1
 NIL
@@ -392,7 +392,7 @@ app-funness-rating
 app-funness-rating
 0
 10
-1.4
+10
 .1
 1
 NIL
@@ -407,7 +407,7 @@ app-user-friendliness-rating
 app-user-friendliness-rating
 0
 10
-1.7
+10
 .1
 1
 NIL
@@ -422,7 +422,7 @@ app-cost
 app-cost
 0
 10
-2.9
+10
 .1
 1
 NIL
@@ -437,7 +437,7 @@ app-sharing-necessity
 app-sharing-necessity
 0
 10
-2.4
+10
 .1
 1
 NIL
