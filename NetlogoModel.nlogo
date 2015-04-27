@@ -116,22 +116,22 @@ to move-people
 end
 
 ;; If a person is on same patch as fellow group member, 
-;; pass on app 
+;; try to talk  
 to attempt-talk
   ask people [set color blue]
   ask people ;;with [app?] 
   [ foreach grouplist [
       show grouplist
       ask other people-here [
-      if (member? ? grouplist) [talk ] ;;[grouplist] of other people-here
+      if (member? ? grouplist) [talk] ;;if not already talking
           ]
         ]
   ]
 end
 
+;; if other doesn't have app and is a match, pass it on
 to talk
-  ;; if not already talking
- ;; ask people [set color red]
+  ;; complicated matching stuff to see if app spreads 
   set color red
   set app? true 
   
@@ -279,7 +279,7 @@ number-of-people
 number-of-people
 0
 300
-248
+50
 1
 1
 NIL
