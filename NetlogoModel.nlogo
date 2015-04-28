@@ -50,7 +50,6 @@ to setup
   setup-people
   setup-people-with-app
   count-initial
-  ;;setup-patches-with-ads
   reset-ticks
 end
 
@@ -70,7 +69,6 @@ to setup-groups
   ask groups [set group-userfriendliness random-normal 5 2] 
   ask groups [set group-level-of-influence random-normal 5 2] 
   
-  ;;ask groups [set grouplist (list random numgroups random numgroups random numgroups)]
   ask groups [set color green]
   show-group-characteristics
 end
@@ -153,30 +151,48 @@ to show-group-characteristics
   ]
 end
   
-  
-
 to setup-people-with-app
-  ;; just for testing, make a few random have app to start 
-  ask people [
-    if (level-of-influence > 6) [set app? true set color yellow]
-  ]
   
+  if (start-choice = "one-per-group") [start-one-each-group]
+  if (start-choice = "top-influential") [start-most-influence]
+  if (start-choice = "least-influential") [start-least-influence]
+  if (start-choice = "random-people") [start-random]
+  if (start-choice = "highest-app-score") [start-highest-app-score]
+
 end
 
+to start-one-each-group
+end
+
+to start-most-influence
+end
+
+to start-least-influence
+end 
+
+to start-random  
+  ask n-of number-people-start-with-app people
+    [ 
+      set app? true
+      set color yellow
+  ]
+end
+
+to start-highest-app-score
+end
+
+
 to count-initial
-ask people [ if (app?) [
+  ask people [ if (app?) [
      foreach [0 1 2 3 4 5 6 7 8 9] [  
       if (member? ?1 grouplist) [array:set groupsHaveCount ?1 (array:item groupsHaveCount ?1 + 1)]       
         ]
   ]
 ]
 end
-to setup-patches-with-ads
-  
-end
 
 to go
-  ;;if ticks >= 500 [ stop ] ;;we want to run until steady state
+  ;; we want to run until steady state
   move-people
   attempt-talk
   tick
@@ -196,13 +212,12 @@ end
 ;; If a person is on same patch as fellow group member, 
 ;; try to talk  
 to attempt-talk
-  ;;ask people [set color blue]
+  
   ask people with [app?] 
   [ set person-talking-influence level-of-influence
     foreach grouplist [
-      ;;show grouplist
       ask other people-here [
-      if (member? ? grouplist) [talk] ;;if not already talking?
+      if (member? ? grouplist) [talk] 
           ]
         ]
   ]
@@ -211,20 +226,24 @@ end
 ;; if other doesn't have app and is a match, pass it on
 to talk
 
+  ;; app-score has to be above never get threshold to even talk 
   if (app-score > never-get-threshold) [
   
-  ;;An individual’s exposure score increases when he comes in contact with a fellow group member. 
-  ;;The increase = “app score”/ 50 * influence score of the other individual. 
-  set exposure-to-app (exposure-to-app + app-score / 50 * person-talking-influence)
+    ;; An individual’s exposure score increases when he comes in contact with a fellow group member. 
+    ;; The increase = “app score”/ 50 * influence score of the other individual. 
+    set exposure-to-app (exposure-to-app + app-score / 50 * person-talking-influence)
 
-  set get-score (app-score + exposure-to-app + app-sharing-capability + app-sharing-necessity)
+    ;; get-score is sum of app-score + exposure + sharing 
+    set get-score (app-score + exposure-to-app + app-sharing-capability + app-sharing-necessity)
   
-  if (get-score > get-threshold) [get-app]
+    ;; get app if above threshold 
+    if (get-score > get-threshold) [get-app]
   ]
 
 end
 
 to get-app
+  ;; if they don't already have it 
   if (not app?) [
    set app? true 
    set color orange
@@ -234,7 +253,6 @@ to get-app
         ]
   ]
 end 
-
 @#$#@#$#@
 GRAPHICS-WINDOW
 261
@@ -324,7 +342,7 @@ number-people-start-with-app
 number-people-start-with-app
 0
 100
-0
+100
 1
 1
 NIL
@@ -344,17 +362,6 @@ number-of-ads-start
 1
 NIL
 HORIZONTAL
-
-SWITCH
-715
-169
-911
-202
-start-people-with-app
-start-people-with-app
-1
-1
--1000
 
 SLIDER
 716
@@ -517,14 +524,14 @@ NIL
 1
 
 CHOOSER
-963
-48
-1101
-93
-startChoice
-startChoice
-"singleUser" "advertisement" "group"
-2
+716
+158
+865
+203
+start-choice
+start-choice
+"one-per-group" "top-influential" "least-influential" "random-people" "highest-app-score"
+3
 
 @#$#@#$#@
 ## WHAT IS IT?
