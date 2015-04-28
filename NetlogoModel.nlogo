@@ -208,11 +208,7 @@ to start-least-influence
 end 
 
 to start-random  
-  ask n-of number-people-start-with-app people
-    [ 
-      set app? true
-      set color yellow
-  ]
+  ask n-of number-people-start-with-app people [get-app]
 end
 
 to start-highest-app-score
@@ -221,6 +217,7 @@ to start-highest-app-score
   let bestScorePeople sublist sortedPeople (number-of-people - number-people-start-with-app) (number-of-people)
   foreach bestScorePeople [
   ask ?1 [ get-app ] 
+
   ]
 
 end
