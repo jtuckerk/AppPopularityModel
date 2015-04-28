@@ -195,14 +195,11 @@ to start-least-influence
 end 
 
 to start-random  
-  ask n-of number-people-start-with-app people
-    [ 
-      set app? true
-      set color yellow
-  ]
+  ask n-of number-people-start-with-app people [get-app]
 end
 
 to start-highest-app-score
+
 end
 
 
@@ -368,7 +365,7 @@ number-people-start-with-app
 number-people-start-with-app
 0
 100
-53
+48
 1
 1
 NIL
@@ -398,7 +395,7 @@ number-of-people
 number-of-people
 0
 300
-300
+298
 1
 1
 NIL
@@ -542,7 +539,7 @@ CHOOSER
 start-choice
 start-choice
 "one-per-group" "top-influential" "least-influential" "random-people" "highest-app-score"
-0
+4
 
 @#$#@#$#@
 ## WHAT IS IT?
