@@ -66,7 +66,7 @@ to setup-groups
   random-seed 137
   ask groups [set group-utility random-normal 5 2] 
   ask groups [set group-funness random-normal 5 2] 
-  ask groups [set group-cost random-normal 5 2]      
+  ask groups [set group-cost random-normal 9 .1]      
   ask groups [set group-userfriendliness random-normal 5 2] 
   ask groups [set group-level-of-influence random-normal 5 2] 
   
@@ -117,11 +117,11 @@ to set-characteristics-from-group
   let locUserFriend3 [group-userfriendliness] of G3
   let locLevelInfluence3 [group-level-of-influence] of G3
   
-  set importance-utility (locUtility1 + locUtility2 + locUtility3) / 3
-  set importance-funness (locFun3 + locFun3 + locFun3) / 3
-  set importance-cost (locCost1 + locCost2 + locCost3) / 3
-  set importance-userfriendliness (locUserFriend1 + locUserFriend2 + locUserFriend3) / 3
-  set level-of-influence (locLevelInfluence1 + locLevelInfluence2 + locLevelInfluence3) / 3
+  set importance-utility random-normal ((locUtility1 + locUtility2 + locUtility3) / 3) 1
+  set importance-funness random-normal ((locFun3 + locFun3 + locFun3) / 3) 1
+  set importance-cost  random-normal ((locCost1 + locCost2 + locCost3) / 3) 1
+  set importance-userfriendliness  random-normal ((locUserFriend1 + locUserFriend2 + locUserFriend3) / 3) 1
+  set level-of-influence  random-normal ((locLevelInfluence1 + locLevelInfluence2 + locLevelInfluence3) / 3) 1
   set exposure-to-app 0
   
   app-score-get
@@ -133,18 +133,22 @@ to app-score-get
   ;; app-person = negative --> app-score =0
   ;; app-person = 0 or positve --> app-score = ranking * score multiplier
   ;; score-multiplier = sum of rankings for all importance factors/4
+  let utility-weight 1.2
+  let funness-weight 1.1
+  let user-friendly-weight 1.0
+  let cost-weight 1
   
   set app-score 0
   let importance-rankings-sum (importance-utility + importance-funness + importance-userfriendliness + importance-cost)
   let score-multiplier (importance-rankings-sum / 4)
   
-  if (app-utility-rating - importance-utility >= 0)  [set app-score (app-score + importance-utility * score-multiplier)]
+  if (app-utility-rating - importance-utility >= 0)  [set app-score (app-score + importance-utility * utility-weight * score-multiplier)]
   
-  if (app-funness-rating - importance-funness >= 0)  [set app-score (app-score + importance-funness * score-multiplier)]
+  if (app-funness-rating - importance-funness >= 0)  [set app-score (app-score + importance-funness * funness-weight * score-multiplier)]
   
-  if (app-user-friendliness-rating - importance-userfriendliness >= 0) [set app-score (app-score + importance-userfriendliness * score-multiplier)]
+  if (app-user-friendliness-rating - importance-userfriendliness >= 0) [set app-score (app-score + importance-userfriendliness * user-friendly-weight * score-multiplier)]
   
-  if (app-cost - importance-cost >= 0)  [set app-score (app-score + importance-cost * score-multiplier)]
+  if ((10 - app-cost) - importance-cost >= 0)  [set app-score (app-score + importance-cost * cost-weight * score-multiplier)]
 end 
 
 to show-group-characteristics
@@ -217,7 +221,7 @@ to talk
   ;;The increase = “app score”/ 50 * influence score of the other individual. 
   set exposure-to-app (exposure-to-app + app-score / 50 * person-talking-influence)
 
-  set get-score (app-score + exposure-to-app + app-sharing-capability + app-sharing-necessity)
+  set get-score (app-score + exposure-to-app + app-sharing-capability)
   
   if (get-score > get-threshold) [get-app]
   ]
@@ -234,7 +238,6 @@ to get-app
         ]
   ]
 end 
-
 @#$#@#$#@
 GRAPHICS-WINDOW
 261
@@ -380,7 +383,7 @@ app-utility-rating
 app-utility-rating
 0
 10
-9.8
+5
 .1
 1
 NIL
@@ -395,7 +398,7 @@ app-funness-rating
 app-funness-rating
 0
 10
-0.6
+5
 .1
 1
 NIL
@@ -410,7 +413,7 @@ app-user-friendliness-rating
 app-user-friendliness-rating
 0
 10
-0.7
+5
 .1
 1
 NIL
@@ -425,7 +428,7 @@ app-cost
 app-cost
 0
 10
-0.9
+1
 .1
 1
 NIL
@@ -436,26 +439,11 @@ SLIDER
 209
 249
 242
-app-sharing-necessity
-app-sharing-necessity
-0
-10
-1.1
-.1
-1
-NIL
-HORIZONTAL
-
-SLIDER
-16
-243
-249
-276
 app-sharing-capability
 app-sharing-capability
 0
 10
-1.9
+5
 .1
 1
 NIL
