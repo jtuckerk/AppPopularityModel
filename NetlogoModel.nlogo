@@ -62,7 +62,7 @@ to setup-groups
   set groupsHaveCount array:from-list n-values 10 [0]
   
   create-groups numgroups  
-  random-seed 222;;137
+  random-seed randomseed;;137
   ask groups [set group-utility random-normal 5 2] 
   ask groups [set group-funness random-normal 5 2] 
   ask groups [set group-cost random-normal 9 .1]      
@@ -151,7 +151,7 @@ end
 
 to show-group-characteristics
   ask groups[
-   show (sentence "utility: " group-utility " fun: " group-funness " cost: " group-cost " userFriendly: " group-userfriendliness " Influence: "group-level-of-influence)
+   show (sentence " utility: " group-utility " fun: " group-funness " cost: " group-cost " userFriendly: " group-userfriendliness " Influence: "group-level-of-influence)
   ]
 end
   
@@ -375,7 +375,7 @@ number-people-start-with-app
 number-people-start-with-app
 0
 100
-3
+1
 1
 1
 NIL
@@ -383,29 +383,14 @@ HORIZONTAL
 
 SLIDER
 718
-309
-904
-342
-number-of-ads-start
-number-of-ads-start
-0
-100
-0
-1
-1
-NIL
-HORIZONTAL
-
-SLIDER
-716
 95
-888
+1048
 128
 number-of-people
 number-of-people
 0
 300
-109
+100
 1
 1
 NIL
@@ -465,7 +450,7 @@ app-cost
 app-cost
 0
 10
-1
+0
 .1
 1
 NIL
@@ -487,10 +472,10 @@ NIL
 HORIZONTAL
 
 PLOT
-726
-366
-1136
-596
+715
+240
+1125
+470
 Percent group members have app
 time 
 percent
@@ -549,7 +534,29 @@ CHOOSER
 start-choice
 start-choice
 "one-per-group" "top-influential" "least-influential" "random-people" "highest-app-score"
+4
+
+INPUTBOX
+867
+28
+1022
+88
+randomseed
+0
 1
+0
+Number
+
+MONITOR
+6
+274
+206
+319
+Total people with app
+count people with [app? = true]
+17
+1
+11
 
 @#$#@#$#@
 ## WHAT IS IT?
