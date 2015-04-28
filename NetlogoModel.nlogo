@@ -50,7 +50,6 @@ to setup
   setup-groups
   setup-people
   setup-people-with-app
-  count-initial
   reset-ticks
 end
 
@@ -189,9 +188,23 @@ to start-one-each-group
 end
 
 to start-most-influence
+  
+  let sortedPeople sort-on [level-of-influence] people
+  let mostInfPeople sublist sortedPeople (number-of-people - number-people-start-with-app) (number-of-people)
+  foreach mostInfPeople [
+  ask ?1 [ get-app ] 
+  ]
+  
+ 
 end
 
 to start-least-influence
+  
+  let sortedPeople sort-on [level-of-influence] people
+  let leastInfPeople sublist sortedPeople 0 number-people-start-with-app
+  foreach leastInfPeople [
+    ask ?1 [ get-app ] 
+  ]
 end 
 
 to start-random  
@@ -203,16 +216,13 @@ to start-random
 end
 
 to start-highest-app-score
-end
-
-
-to count-initial
-  ask people [ if (app?) [
-     foreach [0 1 2 3 4 5 6 7 8 9] [  
-      if (member? ?1 grouplist) [array:set groupsHaveCount ?1 (array:item groupsHaveCount ?1 + 1)]       
-        ]
+  
+    let sortedPeople sort-on [app-score] people
+  let bestScorePeople sublist sortedPeople (number-of-people - number-people-start-with-app) (number-of-people)
+  foreach bestScorePeople [
+  ask ?1 [ get-app ] 
   ]
-]
+
 end
 
 to go
@@ -368,7 +378,7 @@ number-people-start-with-app
 number-people-start-with-app
 0
 100
-53
+3
 1
 1
 NIL
@@ -398,7 +408,7 @@ number-of-people
 number-of-people
 0
 300
-300
+109
 1
 1
 NIL
@@ -542,7 +552,7 @@ CHOOSER
 start-choice
 start-choice
 "one-per-group" "top-influential" "least-influential" "random-people" "highest-app-score"
-0
+1
 
 @#$#@#$#@
 ## WHAT IS IT?
