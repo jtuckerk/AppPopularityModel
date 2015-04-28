@@ -1,6 +1,7 @@
 extensions [array]
 
-globals [numgroups 
+globals [
+  numgroups 
   groupSizes 
   groupsHaveCount
   person-talking-influence
@@ -62,7 +63,7 @@ to setup-groups
   set groupsHaveCount array:from-list n-values 10 [0]
   
   create-groups numgroups  
-  random-seed 137
+  random-seed 222;;137
   ask groups [set group-utility random-normal 5 2] 
   ask groups [set group-funness random-normal 5 2] 
   ask groups [set group-cost random-normal 5 2]      
@@ -162,6 +163,25 @@ to setup-people-with-app
 end
 
 to start-one-each-group
+  let grouparray array:from-list n-values 10 [false]
+  
+  let countn 0 
+  
+  ask people [
+    foreach [0 1 2 3 4 5 6 7 8 9] [  
+      if (member? ?1 grouplist) [
+        if (array:item grouparray ?1 = false)[
+          array:set grouparray ?1 true
+          set app? true
+          set color yellow
+          
+          set countn (countn + 1)
+          show (sentence "count: " countn) 
+          
+          ]
+        ]       
+      ]
+  ]
 end
 
 to start-most-influence
@@ -342,7 +362,7 @@ number-people-start-with-app
 number-people-start-with-app
 0
 100
-100
+53
 1
 1
 NIL
@@ -372,7 +392,7 @@ number-of-people
 number-of-people
 0
 300
-201
+300
 1
 1
 NIL
@@ -387,7 +407,7 @@ app-utility-rating
 app-utility-rating
 0
 10
-9.8
+10
 .1
 1
 NIL
@@ -402,7 +422,7 @@ app-funness-rating
 app-funness-rating
 0
 10
-0.6
+10
 .1
 1
 NIL
@@ -417,7 +437,7 @@ app-user-friendliness-rating
 app-user-friendliness-rating
 0
 10
-0.7
+10
 .1
 1
 NIL
@@ -432,7 +452,7 @@ app-cost
 app-cost
 0
 10
-0.9
+10
 .1
 1
 NIL
@@ -447,7 +467,7 @@ app-sharing-necessity
 app-sharing-necessity
 0
 10
-1.1
+10
 .1
 1
 NIL
@@ -462,7 +482,7 @@ app-sharing-capability
 app-sharing-capability
 0
 10
-1.9
+10
 .1
 1
 NIL
@@ -531,7 +551,7 @@ CHOOSER
 start-choice
 start-choice
 "one-per-group" "top-influential" "least-influential" "random-people" "highest-app-score"
-3
+0
 
 @#$#@#$#@
 ## WHAT IS IT?
