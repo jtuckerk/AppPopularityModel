@@ -43,9 +43,9 @@ end
 
 to setup
   clear-all
-  set numgroups 10
-  set never-get-threshold 40
-  set get-threshold 100
+  set numgroups 100
+  set never-get-threshold 20 * .6
+  set get-threshold 60
   setup-patches
   setup-groups
   setup-people
@@ -65,7 +65,7 @@ to setup-groups
   random-seed randomseed;;137
   ask groups [set group-utility random-normal 5 2] 
   ask groups [set group-funness random-normal 5 2] 
-  ask groups [set group-cost random-normal 9 .1]      
+  ask groups [set group-cost random-normal 5 2]      
   ask groups [set group-userfriendliness random-normal 5 2] 
   ask groups [set group-level-of-influence random-normal 5 2] 
   
@@ -123,7 +123,7 @@ to set-characteristics-from-group
   set exposure-to-app 0
   
   app-score-get
-  
+  ;show app-score
 end
 
 to app-score-get
@@ -131,27 +131,32 @@ to app-score-get
   ;; app-person = negative --> app-score =0
   ;; app-person = 0 or positve --> app-score = ranking * score multiplier
   ;; score-multiplier = sum of rankings for all importance factors/4
-  let utility-weight 1.2
-  let funness-weight 1.1
-  let user-friendly-weight 1.0
-  let cost-weight 1
+  let utility-weight 1.11
+  let funness-weight 1.10
+  let user-friendly-weight 1
+  let cost-weight .4
   
   set app-score 0
-  let importance-rankings-sum (importance-utility + importance-funness + importance-userfriendliness + importance-cost)
-  let score-multiplier (importance-rankings-sum / 4)
+  let importance-rankings-sum (importance-utility + importance-funness + importance-userfriendliness)
+  let score-multiplier (importance-rankings-sum / 3)
   
-  if (app-utility-rating - importance-utility >= 0)  [set app-score (app-score + importance-utility * utility-weight * score-multiplier)]
+  if (app-utility-rating - importance-utility >= 0)  [set app-score (app-score + importance-utility * utility-weight * score-multiplier )]
   
-  if (app-funness-rating - importance-funness >= 0)  [set app-score (app-score + importance-funness * funness-weight * score-multiplier)]
+  if (app-funness-rating - importance-funness >= 0)  [set app-score (app-score + importance-funness * funness-weight * score-multiplier )]
   
   if (app-user-friendliness-rating - importance-userfriendliness >= 0) [set app-score (app-score + importance-userfriendliness * user-friendly-weight * score-multiplier)]
   
-  if ((10 - app-cost) - importance-cost >= 0)  [set app-score (app-score + importance-cost * cost-weight * score-multiplier)]
+  let rand random 100
+  ;show rand 
+  ;show 58.404 * e ^ (-0.896 * app-cost)
+  if (rand > (58.404 * e ^ (-0.896 * app-cost)) )[
+    set app-score (0) ;; ****SomeFunction using app-cost**** (importance-cost - app-cost) * cost-weight * score-multiplier)
+  ]
 end 
 
 to show-group-characteristics
   ask groups[
-   show (sentence " utility: " group-utility " fun: " group-funness " cost: " group-cost " userFriendly: " group-userfriendliness " Influence: "group-level-of-influence)
+   ;show (sentence " utility: " group-utility " fun: " group-funness " cost: " group-cost " userFriendly: " group-userfriendliness " Influence: "group-level-of-influence)
   ]
 end
   
@@ -175,11 +180,9 @@ to start-one-each-group
       if (member? ?1 grouplist) [
         if (array:item grouparray ?1 = false)[
           array:set grouparray ?1 true
-          set app? true
-          set color yellow
+          get-app
           
           set countn (countn + 1)
-          show (sentence "count: " countn) 
           
           ]
         ]       
@@ -262,10 +265,10 @@ to talk
   
     ;; An individual’s exposure score increases when he comes in contact with a fellow group member. 
     ;; The increase = “app score”/ 50 * influence score of the other individual. 
-    set exposure-to-app (exposure-to-app + app-score / 50 * person-talking-influence)
+    set exposure-to-app (exposure-to-app + app-score / 60 * person-talking-influence)
 
-
-  set get-score (app-score + exposure-to-app + app-sharing-capability)
+  let app-sharing-weight .7
+  set get-score (app-score + exposure-to-app + app-sharing-capability * app-sharing-weight)
 
     ;; get-score is sum of app-score + exposure + sharing 
   
@@ -390,7 +393,7 @@ number-of-people
 number-of-people
 0
 300
-100
+300
 1
 1
 NIL
@@ -405,7 +408,7 @@ app-utility-rating
 app-utility-rating
 0
 10
-5
+6
 .1
 1
 NIL
@@ -465,7 +468,7 @@ app-sharing-capability
 app-sharing-capability
 0
 10
-5
+1.1
 .1
 1
 NIL
@@ -534,7 +537,7 @@ CHOOSER
 start-choice
 start-choice
 "one-per-group" "top-influential" "least-influential" "random-people" "highest-app-score"
-4
+1
 
 INPUTBOX
 867
@@ -542,7 +545,7 @@ INPUTBOX
 1022
 88
 randomseed
-0
+442456
 1
 0
 Number
