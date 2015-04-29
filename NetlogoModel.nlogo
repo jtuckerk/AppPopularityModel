@@ -43,7 +43,7 @@ end
 
 to setup
   clear-all
-  set numgroups 100
+  set numgroups 10
   set never-get-threshold 20 * .6
   set get-threshold 60
   setup-patches
@@ -156,7 +156,7 @@ end
 
 to show-group-characteristics
   ask groups[
-   ;show (sentence " utility: " group-utility " fun: " group-funness " cost: " group-cost " userFriendly: " group-userfriendliness " Influence: "group-level-of-influence)
+   show (sentence " utility: " group-utility " fun: " group-funness " cost: " group-cost " userFriendly: " group-userfriendliness " Influence: "group-level-of-influence)
   ]
 end
   
@@ -408,7 +408,7 @@ app-utility-rating
 app-utility-rating
 0
 10
-6
+2.5
 .1
 1
 NIL
@@ -423,7 +423,7 @@ app-funness-rating
 app-funness-rating
 0
 10
-5
+2.5
 .1
 1
 NIL
@@ -438,7 +438,7 @@ app-user-friendliness-rating
 app-user-friendliness-rating
 0
 10
-5
+2.8
 .1
 1
 NIL
@@ -468,7 +468,7 @@ app-sharing-capability
 app-sharing-capability
 0
 10
-1.1
+0.2
 .1
 1
 NIL
@@ -537,7 +537,7 @@ CHOOSER
 start-choice
 start-choice
 "one-per-group" "top-influential" "least-influential" "random-people" "highest-app-score"
-1
+0
 
 INPUTBOX
 867
