@@ -7,6 +7,8 @@ globals [
   person-talking-influence
   never-get-threshold
   get-threshold
+  last-app-get-tick
+  conversations-between-friends
   ]
 
 breed [groups group] 
@@ -43,14 +45,16 @@ end
 
 to setup
   clear-all
+ 
   set numgroups 10
   set never-get-threshold 20 * .6
   set get-threshold 60
   setup-patches
   setup-groups
   setup-people
+   reset-ticks
   setup-people-with-app
-  reset-ticks
+  
 end
 
 to setup-patches
@@ -71,6 +75,7 @@ to setup-groups
   
   ask groups [set color green]
   show-group-characteristics
+  set conversations-between-friends 0
 end
 
 to setup-people
@@ -115,11 +120,11 @@ to set-characteristics-from-group
   let locUserFriend3 [group-userfriendliness] of G3
   let locLevelInfluence3 [group-level-of-influence] of G3
   
-  set importance-utility random-normal ((locUtility1 + locUtility2 + locUtility3) / 3) 1
-  set importance-funness random-normal ((locFun3 + locFun3 + locFun3) / 3) 1
-  set importance-cost  random-normal ((locCost1 + locCost2 + locCost3) / 3) 1
-  set importance-userfriendliness  random-normal ((locUserFriend1 + locUserFriend2 + locUserFriend3) / 3) 1
-  set level-of-influence  random-normal ((locLevelInfluence1 + locLevelInfluence2 + locLevelInfluence3) / 3) 1
+  set importance-utility random-normal ((locUtility1 * 1.5 + locUtility2 + locUtility3 * .5) / 3) .5
+  set importance-funness random-normal ((locFun3 * 1.5 + locFun3 + locFun3 * .5) / 3) .5
+  set importance-cost  random-normal ((locCost1 * 1.5 + locCost2 + locCost3 * .5) / 3) .5
+  set importance-userfriendliness  random-normal ((locUserFriend1 * 1.5 + locUserFriend2 + locUserFriend3 * .5) / 3) .5
+  set level-of-influence  random-normal ((locLevelInfluence1 * 1.5 + locLevelInfluence2 + locLevelInfluence3 * .5) / 3) .5
   set exposure-to-app 0
   
   app-score-get
@@ -150,7 +155,7 @@ to app-score-get
   ;show rand 
   ;show 58.404 * e ^ (-0.896 * app-cost)
   if (rand > (58.404 * e ^ (-0.896 * app-cost)) )[
-    set app-score (0) ;; ****SomeFunction using app-cost**** (importance-cost - app-cost) * cost-weight * score-multiplier)
+    set app-score app-score - (10 * importance-cost) ;; ****SomeFunction using app-cost**** (importance-cost - app-cost) * cost-weight * score-multiplier)
   ]
 end 
 
@@ -259,7 +264,8 @@ end
 
 ;; if other doesn't have app and is a match, pass it on
 to talk
-
+  
+  set conversations-between-friends conversations-between-friends + 1
   ;; app-score has to be above never get threshold to even talk 
   if (app-score > never-get-threshold) [
   
@@ -283,7 +289,7 @@ to get-app
   if (not app?) [
    set app? true 
    set color orange
-   
+   set last-app-get-tick ticks 
      foreach [0 1 2 3 4 5 6 7 8 9] [  
       if (member? ?1 grouplist) [array:set groupsHaveCount ?1 (array:item groupsHaveCount ?1 + 1)]       
         ]
@@ -378,7 +384,7 @@ number-people-start-with-app
 number-people-start-with-app
 0
 100
-1
+0
 1
 1
 NIL
@@ -408,7 +414,7 @@ app-utility-rating
 app-utility-rating
 0
 10
-2.5
+3.1
 .1
 1
 NIL
@@ -423,7 +429,7 @@ app-funness-rating
 app-funness-rating
 0
 10
-2.5
+3.1
 .1
 1
 NIL
@@ -438,7 +444,7 @@ app-user-friendliness-rating
 app-user-friendliness-rating
 0
 10
-2.8
+3.2
 .1
 1
 NIL
@@ -468,7 +474,7 @@ app-sharing-capability
 app-sharing-capability
 0
 10
-0.2
+4.9
 .1
 1
 NIL
@@ -545,7 +551,7 @@ INPUTBOX
 1022
 88
 randomseed
-442456
+308876
 1
 0
 Number
@@ -557,6 +563,28 @@ MONITOR
 319
 Total people with app
 count people with [app? = true]
+17
+1
+11
+
+MONITOR
+265
+448
+385
+493
+NIL
+last-app-get-tick
+17
+1
+11
+
+MONITOR
+420
+452
+629
+497
+NIL
+conversations-between-friends
 17
 1
 11
