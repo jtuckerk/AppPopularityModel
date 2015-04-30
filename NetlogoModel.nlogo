@@ -160,8 +160,11 @@ to app-score-get
 end 
 
 to show-group-characteristics
-  ask groups[
-   show (sentence " utility: " group-utility " fun: " group-funness " cost: " group-cost " userFriendly: " group-userfriendliness " Influence: "group-level-of-influence)
+  
+  let sortedGroups sort-on [who] groups
+  
+  foreach sortedGroups[
+   ask ?1 [show (sentence " utility: " group-utility " fun: " group-funness " cost: " group-cost " userFriendly: " group-userfriendliness " Influence: "group-level-of-influence)]
   ]
 end
   
