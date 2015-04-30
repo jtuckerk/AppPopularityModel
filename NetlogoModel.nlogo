@@ -417,7 +417,7 @@ app-utility-rating
 app-utility-rating
 0
 10
-3.1
+4.2
 .1
 1
 NIL
@@ -432,7 +432,7 @@ app-funness-rating
 app-funness-rating
 0
 10
-3.1
+4.2
 .1
 1
 NIL
@@ -447,7 +447,7 @@ app-user-friendliness-rating
 app-user-friendliness-rating
 0
 10
-3.2
+4.5
 .1
 1
 NIL
@@ -486,8 +486,8 @@ HORIZONTAL
 PLOT
 715
 240
-1125
-470
+1268
+678
 Percent group members have app
 time 
 percent
@@ -501,13 +501,13 @@ true
 PENS
 "group 0" 1.0 0 -16777216 true "" "plot (array:item groupsHaveCount 0 / array:item groupSizes 0 ) * 100"
 "group 1" 1.0 0 -7500403 true "" "plot (array:item groupsHaveCount 1 / array:item groupSizes 1 ) * 100"
-"group 2" 1.0 0 -2674135 true "" "plot (array:item groupsHaveCount 2 / array:item groupSizes 2 ) * 100"
+"group 2" 1.0 0 -5207188 true "" "plot (array:item groupsHaveCount 2 / array:item groupSizes 2 ) * 100"
 "group 3" 1.0 0 -955883 true "" "plot (array:item groupsHaveCount 3 / array:item groupSizes 3 ) * 100"
-"group 4" 1.0 0 -6459832 true "" "plot (array:item groupsHaveCount 4 / array:item groupSizes 4 ) * 100"
+"group 4" 1.0 0 -12440034 true "" "plot (array:item groupsHaveCount 4 / array:item groupSizes 4 ) * 100"
 "group 5" 1.0 0 -1184463 true "" "plot (array:item groupsHaveCount 5 / array:item groupSizes 5 ) * 100"
-"group 6" 1.0 0 -10899396 true "" "plot (array:item groupsHaveCount 6 / array:item groupSizes 6 ) * 100"
+"group 6" 1.0 0 -7858858 true "" "plot (array:item groupsHaveCount 6 / array:item groupSizes 6 ) * 100"
 "group 7" 1.0 0 -13840069 true "" "plot (array:item groupsHaveCount 7 / array:item groupSizes 7) * 100"
-"group 8" 1.0 0 -14835848 true "" "plot (array:item groupsHaveCount 8 / array:item groupSizes 8 ) * 100"
+"group 8" 1.0 0 -2064490 true "" "plot (array:item groupsHaveCount 8 / array:item groupSizes 8 ) * 100"
 "group 9" 1.0 0 -11221820 true "" "plot (array:item groupsHaveCount 9 / array:item groupSizes 9 ) * 100"
 
 SWITCH
