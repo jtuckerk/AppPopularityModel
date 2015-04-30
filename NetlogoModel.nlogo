@@ -164,7 +164,8 @@ to show-group-characteristics
   let sortedGroups sort-on [who] groups
   
   foreach sortedGroups[
-   ask ?1 [show (sentence " utility: " group-utility " fun: " group-funness " cost: " group-cost " userFriendly: " group-userfriendliness " Influence: "group-level-of-influence)]
+   ask ?1 [show (sentence " utility: " precision group-utility 2 " fun: " precision group-funness 2 " cost: " precision group-cost 2 
+       " userFriendly: " precision group-userfriendliness 2 " Influence: " precision group-level-of-influence 2)]
   ]
 end
   
